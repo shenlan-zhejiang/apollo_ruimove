@@ -1,0 +1,222 @@
+syntax = "proto2";
+
+package apollo.canbus;
+
+message Vcu_ctrl1_2a1 {
+// Control Message
+  enum Steering_enable_stateType {
+    STEERING_DISABLE_STATE_STEERING_AUTOCONTROL = 0;
+    STEERING_ENABLE_STATE_STEERING_AUTOCONTROL = 1;
+  }
+  enum Signal_source_Type {
+    SIGNAL_SOURCE_FROM_ACU = 0;
+    SIGNAL_SOURCE_FROM_RCU = 1;
+  }
+  enum Signal_control_Type {
+    SIGNAL_CONTROL_DISABLE = 0;
+    SIGNAL_CONTROL_ENABLE = 1;
+  }
+  enum Gear_state_targetType {
+    GEAR_STATE_TARGET_INVALID = 0;
+    GEAR_STATE_TARGET_D = 1;
+    GEAR_STATE_TARGET_R = 2;
+    GEAR_STATE_TARGET_N = 3;
+    GEAR_STATE_TARGET_P = 4;
+  }
+
+  // [] [0|1]
+  optional Steering_enable_stateType v_ctrl1_steerenable = 1;
+  // 0:ACU; 1:RCU [] [0|1]
+  optional Signal_source_Type v_ctrl1_signalsource = 2;
+  // 0:disable;1:enable [] [0|1]
+  optional Signal_control_Type v_ctrl1_signalenable = 3;
+  // target deacceleration [] [0|10]
+  optional double v_ctrl1_tgtdeaccel = 4;
+  // break percent,[0,100] unit:% [%] [0|100]
+  optional double v_ctrl1_brkpercent = 5;
+  // break mode    0:break pedal percent; 1:deacceleration [] [0|1]
+  optional bool v_ctrl1_brkmode = 6;
+  // target steer angle [-36,36], Counterclockwise is positive [deg] [-36|36]
+  optional double v_ctrl1_tgtangle = 7;
+  // target gear 0x00N  0x01D  0x02R [] [0|3]
+  optional Gear_state_targetType v_ctrl1_tgtgear = 8;
+  // target torque percent[0,100] unit:% [%] [0|100]
+  optional int32 v_ctrl1_trqpercent = 9;
+  // drive mode   0: torque percent; 1: speed [] [0|1]
+  optional bool v_ctrl1_drivemode = 10;
+  // target speed,[0,60] [km/h] [0|60]
+  optional double v_ctrl1_tgtspd = 11;
+}
+
+message Vcu_ctrl2_2a2 {
+// Control Message
+  enum Signal_source_Type {
+    SIGNAL_SOURCE_FROM_ACU = 0;
+    SIGNAL_SOURCE_FROM_RCU = 1;
+  }
+  enum Signal_control_Type {
+    SIGNAL_CONTROL_DISABLE = 0;
+    SIGNAL_CONTROL_ENABLE = 1;
+  }
+  // [] [0|0]
+  optional int32 v_ctrl2_autolight = 1;
+  // [] [0|0]
+  optional bool v_ctrl2_rightmarkerlight = 2;
+  // [] [0|0]
+  optional bool v_ctrl2_leftmarkerlight = 3;
+  // [] [0|0]
+  optional int32 v_ctrl2_statuslight = 4;
+  // [] [0|0]
+  optional int32 v_ctrl2_screen = 5;
+  // [] [0|0]
+  optional bool v_ctrl2_headlight = 6;
+  // [] [0|0]
+  optional bool v_ctrl2_brakelight = 7;
+  // 0:ACU; 1:RCU [] [0|1]
+  optional Signal_source_Type v_ctrl2_signalsource = 8;
+  // 0:disabled; 1:enabled [] [0|1]
+  optional Signal_control_Type v_ctrl2_signalenable = 9;
+  // horn [] [0|1]
+  optional int32 v_ctrl2_horn = 10;
+  // voice(default:0)    0:none; 1:defined1; 2:defined2; 3:defined3 [] [0|31]
+  optional int32 v_ctrl2_voice = 11;
+  // right turn-light 0:close  1:open [] [0|0]
+  optional bool v_ctrl2_rightturnlight = 12;
+  // left turn-light 0:close  1:open [] [0|0]
+  optional bool v_ctrl2_leftturnlight = 13;
+  // emergency stop 0:close  1:open [] [0|255]
+  optional bool v_ctrl2_emergencystop = 14;
+}
+
+message Vcu_state1_2b1 {
+// Report Message
+
+  enum Gear_state_actualType {
+    GEAR_STATE_ACTUAL_INVALID = 0;
+    GEAR_STATE_ACTUAL_D = 1;
+    GEAR_STATE_ACTUAL_R = 2;
+    GEAR_STATE_ACTUAL_N = 3;
+    GEAR_STATE_ACTUAL_P = 4;
+  }
+
+  // current auto-drive key state [] [0|1]
+  optional bool v_state1_curkeystate = 1;
+  // current break state    0:break pedal percent; 1:deacceleration [] [0|1]
+  optional bool v_state1_curbrkmode = 2;
+  // current emergency stop state [] [0|3]
+  optional int32 v_state1_curemergencystop = 3;
+  // isReady 0:No Ready 1:Ready [] [0|0]
+  optional bool v_state1_isready = 4;
+  // VCU current break presure[EHB presure] [] [0|255]
+  optional int32 v_state1_curbrkpres = 5;
+  // VCU current steer angle [EPS steer angle] [] [-36|36]
+  optional double v_state1_curangle = 6;
+  // current drive mode   0x00:manual; 0x01: auto-drive; 0x02: remote-drive [] [0|3]
+  optional int32 v_state1_curdriverlessmode = 7;
+  // current speed [km/h] [-102.4|102.35]
+  optional double v_state1_curspeed = 8;
+  // current drive mode   0: torque percent; 1: speed [] [0|3]
+  optional int32 v_state1_curdrivemode = 9;
+  // current gear 0x00N  0x01D  0x02R [] [0|2]
+  optional Gear_state_actualType v_state1_curgear = 10;
+}
+
+message Vcu_state2_2b2 {
+// Report Message
+  // [] [0|0]
+  optional bool v_state2_autolight = 1;
+  // [] [0|0]
+  optional int32 v_state2_screen = 2;
+  // [] [0|0]
+  optional bool v_state2_statuslight = 3;
+  // [] [0|0]
+  optional int32 v_state2_soc = 4;
+  // [] [0|0]
+  optional bool v_state2_rightmarkerlight = 5;
+  // [] [0|0]
+  optional bool v_state2_leftmarkerlight = 6;
+  // [] [0|0]
+  optional bool v_state2_horn = 7;
+  // [] [0|0]
+  optional bool v_state2_headlight = 8;
+  // [] [0|0]
+  optional bool v_state2_fronttentacles = 9;
+  // [] [0|0]
+  optional bool v_state2_emergencystop_3 = 10;
+  // [] [0|0]
+  optional bool v_state2_emergencystop_2 = 11;
+  // [] [0|0]
+  optional bool v_state2_emergencystop_1 = 12;
+  // [] [0|0]
+  optional bool v_state2_brakelight = 13;
+  // [] [0|0]
+  optional int32 v_state2_batchargeordischarge = 14;
+  // [] [0|0]
+  optional bool v_state2_backtentacles = 15;
+  // voice(default:0)    0:none; 1:defined1; 2:defined2; 3:defined3 [] [0|0]
+  optional int32 v_state2_voice = 16;
+  // right turn-light   0:close  1:open [] [0|0]
+  optional bool v_state2_rightturnlight = 17;
+  // left turn-light    0:close  1:open [] [0|0]
+  optional bool v_state2_leftturnlight = 18;
+}
+
+message Ehb_errinfo_620 {
+// Report Message
+  // Checksum:Sum(Byte0:Byte6)^0xFF [] [0|255]
+  optional int32 ehb_errinfo_checksum = 1;
+  // [] [0|15]
+  optional int32 ehb_errinfo_rollcnt = 2;
+  // [] [0|0]
+  optional bool ehb_cansignal_vehiclespeed_err = 3;
+  // [] [0|1]
+  optional bool ehb_canmsgctrl_err = 4;
+  // [] [0|1]
+  optional bool ehb_motoropen_err = 5;
+  // [] [0|1]
+  optional bool ehb_motorpossensor_err = 6;
+  // [] [0|1]
+  optional bool ehb_overtemp_err = 7;
+  // [] [0|1]
+  optional bool ehb_chip_err = 8;
+  // [] [0|1]
+  optional bool ehb_post_err = 9;
+  // [] [0|1]
+  optional bool ehb_systeminit_err = 10;
+  // [] [0|1]
+  optional bool ehb_weeping_err = 11;
+  // [] [0|0]
+  optional bool ehb_pwrswh_err = 12;
+  // [] [0|1]
+  optional bool ehb_drvmtr_err = 13;
+  // [] [0|1]
+  optional bool ehb_drvbridge_err = 14;
+  // [] [0|1]
+  optional bool ehb_ecupowersupply_err = 15;
+  // [] [0|1]
+  optional bool ehb_powersupply_err = 16;
+  // [] [0|1]
+  optional bool ehb_can_err = 17;
+  // [] [0|1]
+  optional bool ehb_brkpresrsenor_alarm = 18;
+  // [] [0|1]
+  optional bool ehb_powersupply_alarm = 19;
+  // [] [0|1]
+  optional bool ehb_overtemp_alarm = 20;
+  // [] [0|1]
+  optional bool ehb_tempsenor_err = 21;
+  // [] [0|1]
+  optional bool ehb_curtsenor_err = 22;
+  // 0x0: Normal 0x1: Fault [] [0|1]
+  optional bool ehb_lowbrkfld_alarm = 23;
+  // 0x0: Normal 0x1: Fault [] [0|1]
+  optional bool ehb_brkcmdabnormal_err = 24;
+}
+
+message Ruimove {
+  optional Vcu_ctrl1_2a1 vcu_ctrl1_2a1 = 1; // control message
+  optional Vcu_ctrl2_2a2 vcu_ctrl2_2a2 = 2; // control message
+  optional Vcu_state1_2b1 vcu_state1_2b1 = 3; // report message
+  optional Vcu_state2_2b2 vcu_state2_2b2 = 4; // report message
+  optional Ehb_errinfo_620 ehb_errinfo_620 = 5; // report message
+}
