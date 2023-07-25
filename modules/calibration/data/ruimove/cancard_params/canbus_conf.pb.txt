@@ -1,5 +1,5 @@
 vehicle_parameter {
-  brand: DKIT
+  brand: RUIMOVE
   max_enable_fail_attempt: 5
   driving_mode: AUTO_SPEED_ONLY
 }
